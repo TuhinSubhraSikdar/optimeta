@@ -1,10 +1,91 @@
 {% extends 'core/base.html' %}
-
-{% block title %}Home | OptiMeta{% endblock %}
+{% block title %}OptiMeta | Metadata Optimization Studio{% endblock %}
 
 {% block content %}
-<div class="text-center">
-    <h1 class="mb-4">Welcome to OptiMeta 🚀</h1>
-    <p class="lead">Optimize metadata for PDFs, images, and videos.</p>
-</div>
-{% endblock %}  
+
+<section class="hero">
+    <h1 class="glow-title">OptiMeta</h1>
+    <p class="tagline">
+        Optimize metadata for PDFs, Images & Videos — Built for SEO Performance.
+    </p>
+</section>
+
+<section class="upload-section">
+
+    <div id="drop-area" class="glass-card">
+        <h3>Drag & Drop your file here</h3>
+        <span class="or-text">or</span>
+        <input type="file" id="fileInput" hidden>
+        <button id="browseBtn">Browse File</button>
+    </div>
+
+    <div id="fileInfo" class="file-info hidden"></div>
+
+</section>
+
+<section id="metadataForm" class="metadata-section hidden">
+    <h2>Metadata Configuration</h2>
+
+    <form>
+        <div class="form-group">
+            <label>Title</label>
+            <input type="text" placeholder="Enter title">
+        </div>
+
+        <div class="form-group">
+            <label>Author</label>
+            <input type="text" placeholder="Enter author">
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+            <textarea placeholder="Enter description"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Keywords</label>
+            <input type="text" placeholder="keyword1, keyword2">
+        </div>
+
+        <div class="form-group">
+            <label>Custom Date & Time</label>
+            <input type="datetime-local">
+        </div>
+
+        <button type="submit" class="neon-btn">
+            🚀 Optimize File
+        </button>
+    </form>
+</section>
+
+<section class="how-it-works">
+    <h2>How OptiMeta Works</h2>
+    <div class="steps">
+        <div class="step">
+            <span>1</span>
+            <p>Upload your file (PDF, Image, or Video).</p>
+        </div>
+        <div class="step">
+            <span>2</span>
+            <p>Edit metadata fields and structured data.</p>
+        </div>
+        <div class="step">
+            <span>3</span>
+            <p>Download your SEO-optimized file instantly.</p>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <p>Built by <strong>Tuhin Subhra Sikdar</strong></p>
+    <div class="social-links">
+        <a href="https://github.com/TuhinSubhraSikdar" target="_blank" class="icon-btn">
+            <i class="fab fa-github"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/tuhin-subhra-sikdar/" target="_blank" class="icon-btn">
+            <i class="fab fa-linkedin"></i>
+        </a>
+    </div>
+</footer>
+
+{% endblock %}
