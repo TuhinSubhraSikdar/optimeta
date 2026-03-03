@@ -1,0 +1,153 @@
+{% extends 'core/base.html' %}
+{% block title %}OptiMeta | Metadata Viewer{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <h1 class="glow-title">OptiMeta Viewer</h1>
+    <p class="tagline">
+        Upload your file and instantly inspect embedded metadata.
+    </p>
+</section>
+
+<section class="upload-section">
+
+    <form id="viewerForm" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div id="drop-area" class="glass-card">
+            <h3>Drag & Drop your file here</h3>
+            <span class="or-text">or</span>
+
+            <input type="file" name="file" id="fileInput" hidden required>
+            <button type="button" id="browseBtn">Browse File</button>
+        </div>
+
+        <div id="fileInfo" class="file-info hidden"></div>
+
+        <div style="text-align:center; margin-top:20px;">
+            <button type="submit" class="neon-btn">
+                🔍 View Metadata
+            </button>
+        </div>
+
+    </form>
+
+</section>
+
+{% if metadata %}
+<section class="metadata-section">
+    <h2>Extracted Metadata</h2>
+
+    <div class="glass-card" style="padding:25px; margin-top:20px;">
+
+        <div class="form-group">
+            <label>Title</label>
+            <p>{{ metadata.title|default:"Not Available" }}</p>
+        </div>
+
+        <div class="form-group">
+            <label>Author</label>
+            <p>{{ metadata.author|default:"Not Available" }}</p>
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+            <p>{{ metadata.description|default:"Not Available" }}</p>
+        </div>
+
+        <div class="form-group">
+            <label>Keywords</label>
+            <p>{{ metadata.keywords|default:"Not Available" }}</p>
+        </div>
+
+        <div class="form-group">
+            <label>Creation Date</label>
+            <p>{{ metadata.creation_date|default:"Not Available" }}</p>
+        </div>
+
+        <div class="form-group">
+            <label>Modification Date</label>
+            <p>{{ metadata.modification_date|default:"Not Available" }}</p>
+        </div>
+
+    </div>
+</section>
+{% endif %}
+
+<section class="how-it-works">
+    <h2>How Metadata Viewer Works</h2>
+    <div class="steps">
+        <div class="step">
+            <span>1</span>
+            <p>Upload a PDF or Image file.</p>
+        </div>
+        <div class="step">
+            <span>2</span>
+            <p>OptiMeta reads the embedded metadata.</p>
+        </div>
+        <div class="step">
+            <span>3</span>
+            <p>Metadata is displayed instantly on screen.</p>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <p>Built by <strong>Tuhin Subhra Sikdar</strong></p>
+    <div class="social-links">
+        <a href="https://github.com/TuhinSubhraSikdar" target="_blank" class="icon-btn">
+            <i class="fab fa-github"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/tuhin-subhra-sikdar/" target="_blank" class="icon-btn">
+            <i class="fab fa-linkedin"></i>
+        </a>
+    </div>
+</footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const dropArea = document.getElementById("drop-area");
+    const fileInput = document.getElementById("fileInput");
+    const browseBtn = document.getElementById("browseBtn");
+    const fileInfo = document.getElementById("fileInfo");
+
+    browseBtn.addEventListener("click", () => fileInput.click());
+
+    fileInput.addEventListener("change", function () {
+        handleFile(this.files[0]);
+    });
+
+    dropArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropArea.classList.add("dragover");
+    });
+
+    dropArea.addEventListener("dragleave", () => {
+        dropArea.classList.remove("dragover");
+    });
+
+    dropArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropArea.classList.remove("dragover");
+
+        const file = e.dataTransfer.files[0];
+        fileInput.files = e.dataTransfer.files;
+        handleFile(file);
+    });
+
+    function handleFile(file) {
+        if (!file) return;
+
+        fileInfo.classList.remove("hidden");
+        fileInfo.innerHTML = `
+            <p><strong>Selected File:</strong> ${file.name}</p>
+            <p><strong>Size:</strong> ${(file.size / 1024).toFixed(2)} KB</p>
+        `;
+    }
+
+});
+</script>
+
+{% endblock %}

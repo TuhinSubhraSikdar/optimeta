@@ -9,53 +9,72 @@
         Optimize metadata for PDFs, Images & Videos — Built for SEO Performance.
     </p>
 </section>
+{% if request.GET.success %}
+<section class="result-summary">
+    <div class="summary-card">
+        <h2>✅ Optimization Successful</h2>
+        <p>Your file has been optimized with updated metadata.</p>
+        <div class="summary-badge">Metadata Embedded Successfully</div>
+    </div>
+</section>
+{% endif %}
 
 <section class="upload-section">
 
-    <div id="drop-area" class="glass-card">
-        <h3>Drag & Drop your file here</h3>
-        <span class="or-text">or</span>
-        <input type="file" id="fileInput" hidden>
-        <button id="browseBtn">Browse File</button>
-    </div>
+    <!-- FORM STARTS HERE -->
+    <form id="optimizeForm" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
 
-    <div id="fileInfo" class="file-info hidden"></div>
+        <!-- Drag & Drop Area -->
+        <div id="drop-area" class="glass-card">
+            <h3>Drag & Drop your file here</h3>
+            <span class="or-text">or</span>
 
-</section>
+            <!-- IMPORTANT: file input must be inside form -->
+            <input type="file" name="file" id="fileInput" hidden required>
 
-<section id="metadataForm" class="metadata-section hidden">
-    <h2>Metadata Configuration</h2>
-
-    <form>
-        <div class="form-group">
-            <label>Title</label>
-            <input type="text" placeholder="Enter title">
+            <button type="button" id="browseBtn">Browse File</button>
         </div>
 
-        <div class="form-group">
-            <label>Author</label>
-            <input type="text" placeholder="Enter author">
-        </div>
+        <div id="fileInfo" class="file-info hidden"></div>
 
-        <div class="form-group">
-            <label>Description</label>
-            <textarea placeholder="Enter description"></textarea>
-        </div>
+        <!-- Metadata Section -->
+        <section id="metadataForm" class="metadata-section hidden">
+            <h2>Metadata Configuration</h2>
 
-        <div class="form-group">
-            <label>Keywords</label>
-            <input type="text" placeholder="keyword1, keyword2">
-        </div>
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" name="title" placeholder="Enter title">
+            </div>
 
-        <div class="form-group">
-            <label>Custom Date & Time</label>
-            <input type="datetime-local">
-        </div>
+            <div class="form-group">
+                <label>Author</label>
+                <input type="text" name="author" placeholder="Enter author">
+            </div>
 
-        <button type="submit" class="neon-btn">
-            🚀 Optimize File
-        </button>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="description" placeholder="Enter description"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Keywords</label>
+                <input type="text" name="keywords" placeholder="keyword1, keyword2">
+            </div>
+
+            <div class="form-group">
+                <label>Custom Date & Time</label>
+                <input type="datetime-local" name="custom_datetime" id="customDateTime">
+            </div>
+
+            <button type="submit" class="neon-btn">
+                🚀 Optimize File
+            </button>
+        </section>
+
     </form>
+    <!-- FORM ENDS HERE -->
+
 </section>
 
 <section class="how-it-works">
@@ -87,5 +106,76 @@
         </a>
     </div>
 </footer>
+
+<!-- Drag & Drop Script -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const dropArea = document.getElementById("drop-area");
+    const fileInput = document.getElementById("fileInput");
+    const browseBtn = document.getElementById("browseBtn");
+    const fileInfo = document.getElementById("fileInfo");
+    const metadataSection = document.getElementById("metadataForm");
+
+    browseBtn.addEventListener("click", () => fileInput.click());
+
+    fileInput.addEventListener("change", function () {
+        handleFile(this.files[0]);
+    });
+
+    dropArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropArea.classList.add("dragover");
+    });
+
+    dropArea.addEventListener("dragleave", () => {
+        dropArea.classList.remove("dragover");
+    });
+
+    dropArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropArea.classList.remove("dragover");
+
+        const file = e.dataTransfer.files[0];
+        fileInput.files = e.dataTransfer.files;
+        handleFile(file);
+    });
+
+    function handleFile(file) {
+        if (!file) return;
+
+        fileInfo.classList.remove("hidden");
+        fileInfo.innerHTML = `
+            <p><strong>Selected File:</strong> ${file.name}</p>
+            <p><strong>Size:</strong> ${(file.size / 1024).toFixed(2)} KB</p>
+        `;
+
+        metadataSection.classList.remove("hidden");
+    }
+
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const dateInput = document.getElementById("customDateTime");
+
+    function setCurrentDateTime() {
+        const now = new Date();
+
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+
+        const formatted = `${year}-${month}-${day}T${hours}:${minutes}`;
+        dateInput.value = formatted;
+    }
+
+    setCurrentDateTime();
+
+});
+
+</script>
 
 {% endblock %}

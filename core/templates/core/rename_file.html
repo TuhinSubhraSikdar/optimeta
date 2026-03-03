@@ -1,0 +1,36 @@
+{% extends 'core/base.html' %}
+{% block title %}Rename Optimized File{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <h1 class="glow-title">Rename Your File</h1>
+    <p class="tagline">
+        Your metadata has been successfully embedded.
+    </p>
+</section>
+
+<section class="metadata-section">
+    <form method="POST" action="{% url 'download_file' %}">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label>Original File Name</label>
+            <p><strong>{{ original_name }}</strong></p>
+        </div>
+
+        <div class="form-group">
+            <label>Rename File (Optional)</label>
+            <input type="text" name="new_filename" placeholder="Enter new file name (without extension)">
+        </div>
+
+        <div style="text-align:center; margin-top:30px;">
+            <button type="submit" class="neon-btn">
+                ⬇ Download File
+            </button>
+        </div>
+
+    </form>
+</section>
+
+{% endblock %}
